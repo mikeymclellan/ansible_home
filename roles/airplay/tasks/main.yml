@@ -15,8 +15,10 @@
 - name: Get shairport-sync source from GitHub
   git: src=https://github.com/mikebrady/shairport-sync.git dest=/users/pi
 
-- name: Add shairport-sync user
+- name: Add shairport-sync group
   group: name=shairport-sync state=present
+
+- name: Add shairport-sync user
   user: name=shairport-sync shell=/usr/bin/nologin groups=audio,shairport-sync append=yes createhome=no state=present
 
 - name: Build shairport-sync

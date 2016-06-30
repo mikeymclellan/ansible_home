@@ -4,9 +4,10 @@
 - hosts: airplay
   remote_user: pi
   become_user: root
+  become: yes
 
   roles:
     - airplay
 
-  handlers:
-    - include: handlers/handlers.yml
+#  handlers:
+#    - include: handlers/handlers.yml
