@@ -5,3 +5,6 @@
 
   roles:
     - camera
+
+  handlers:
+    - include: handlers/handlers.yml

@@ -76,6 +76,8 @@
   lineinfile: dest=/boot/config.txt regexp='^#(dtparam=spi=on)$' line='\1' backrefs=yes
   notify: reboot
 
+- include: user.yml
+
 # Reboot due to possible changes now
 - meta: flush_handlers
 

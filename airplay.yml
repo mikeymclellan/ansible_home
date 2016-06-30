@@ -7,3 +7,6 @@
 
   roles:
     - airplay
+
+  handlers:
+    - include: handlers/handlers.yml

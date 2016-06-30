@@ -5,17 +5,15 @@
   remote_user: pi
   sudo: yes
 
-  # Define some variables
-  vars_prompt:
-    - name: "wifi_password"
-      prompt: "Enter McLellan Wifi password"
-      private: yes
-
   vars:
     - wificlient_networks:
        - ssid: McLellan
-         psk: "{{ wifi_password }}"
+         psk: minceontoast
 
   roles:
     - common
     - wificlient
+
+
+  handlers:
+    - include: handlers/handlers.yml
