@@ -1,0 +1,5 @@
+---
+# Master playbook; include all the other machine group playbooks
+- include: pis.yml
+- include: airplay.yml
+- include: cameras.yml

@@ -1,0 +1,16 @@
+---
+# pis playbook: define all the roles for pis
+
+- hosts: pis
+  remote_user: pi
+  sudo: yes
+
+  # Define some variables
+  vars:
+    - wificlient_networks:
+       - ssid: McLellan
+         psk: minceontoast
+
+  roles:
+    - common
+    - wificlient

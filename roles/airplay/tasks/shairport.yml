@@ -1,0 +1,34 @@
+---
+- name: Install shairport-sync prerequisites
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - autoconf
+    - libtool
+    - libdaemon-dev
+    - libasound2-dev
+    - libpopt-dev
+    - libconfig-dev
+    - avahi-daemon
+    - libavahi-client-dev
+    - libssl-dev
+
+- name: Get shairport-sync source from GitHub
+  git: src=https://github.com/mikebrady/shairport-sync.git dest=/users/pi
+
+- name: Add shairport-sync user
+  group: name=shairport-sync state=present
+  user: name=shairport-sync shell=/usr/bin/nologin groups=audio,shairport-sync append=yes createhome=no state=present
+
+- name: Build shairport-sync
+  shell: "{{ item }}"
+  args:
+    chdir: /users/pi/shairport-sync
+  with_items:
+    - autoreconf -i -f
+    - ./configure --with-alsa --with-avahi --with-ssl=openssl --with-systemd
+    - make
+    - make install
+
+- name: Enable shairport-sync systemd
+  service: name=shairport-sync enabled=yes
+  notify: reboot

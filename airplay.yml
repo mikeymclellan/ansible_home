@@ -1,0 +1,9 @@
+---
+# airplay playbook: define all the roles for airplay hosts
+
+- hosts: airplay
+  remote_user: pi
+  sudo: yes
+
+  roles:
+    - airplay

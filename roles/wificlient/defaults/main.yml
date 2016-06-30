@@ -1,0 +1,8 @@
+---
+wificlient_interface: wlan1
+  
+wificlient_networks:
+  - ssid: defaultssid
+    psk: defaultpassphrase
+    priority: 1
+    scan_ssid: 0

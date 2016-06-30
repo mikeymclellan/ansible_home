@@ -1,0 +1,80 @@
+---
+- name: set hostname
+  hostname: name={{ hostname }}
+
+- name: New hostname also to /etc/hosts file
+  lineinfile: dest=/etc/hosts regexp='^127\.0\.1\.1' line='127.0.1.1 {{ hostname }}'
+
+- name: Copy timezone file
+  template: src=timezone dest=/etc/timezone mode=0644
+  register: timezone_result
+
+- name: Set timezone
+  command: dpkg-reconfigure -f noninteractive tzdata
+  when: timezone_result.changed
+
+- name: Update the apt cache
+  apt: update_cache=yes cache_valid_time=7200
+
+- name: Update the Raspbian distribution
+  apt: upgrade=yes
+  when: apt_upgrade == true
+  notify: reboot
+
+- name: Install/update some basic tools
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - unattended-upgrades
+    - build-essential
+    - git
+    - curl
+    - htop
+    - nmap
+    - tmux
+    - zsh
+    - nmon
+    - dstat
+    - rpi-update
+    - haveged
+    - avahi-daemon
+    - rng-tools
+    - netatalk
+    - screen
+    - dnsutils
+    - wavemon
+    - telnet
+    - speedtest-cli
+    - iw
+  notify: reboot
+
+- name: Run api-update
+  shell: "rpi-update"
+
+- name: Autoremove any unused packages
+  shell: "apt-get autoremove --assume-yes --purge"
+  register: autoremove_output
+  changed_when: "'The following packages will be REMOVED' in autoremove_output.stdout"
+
+- name: Autoclean the system
+  shell: "apt-get autoclean --assume-yes"
+
+- name: Some shell aliases for the user
+  lineinfile: dest=/home/{{ ansible_ssh_user }}/.bashrc line="{{ item }}"
+  with_items:
+  - "alias ll='ls -l'"
+  - "alias la='ls -la'"
+  - "alias lt='ls -lat'"
+
+- name: Disable logging to /dev/xconsole   # By default nobody reads from /dev/xconsole and thus it overflows causing "action 'action 17' suspended" errors to syslog
+  replace:
+    dest=/etc/rsyslog.conf
+    regexp='^daemon.*mail(.|\n)*?/dev/xconsole'
+    replace='# Removed by Ansible'
+  notify: restart-rsyslog
+
+- name: Enable SPI
+  lineinfile: dest=/boot/config.txt regexp='^#(dtparam=spi=on)$' line='\1' backrefs=yes
+  notify: reboot
+
+# Reboot due to possible changes now
+- meta: flush_handlers

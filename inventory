@@ -1,0 +1,10 @@
+[pis]
+peggy hostname=peggy
+files hostname=files
+telly hostname=telly
+
+[airplay]
+peggy
+
+[cameras]
+peggy

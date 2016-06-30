@@ -1,0 +1,18 @@
+# Ansible-generated configuration file
+
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+
+{% for wlan in wificlient_networks %}
+network={
+    ssid="{{ wlan.ssid }}"
+    psk="{{ wlan.psk }}"
+{% if wlan.priority is defined %}
+    priority={{ wlan.priority }}
+{%- endif %}    
+{% if wlan.scan_ssid is defined %}
+    scan_ssid={{ wlan.scan_ssid }}
+{%- endif %}    
+}
+
+{% endfor %}
