@@ -6,10 +6,15 @@
   sudo: yes
 
   # Define some variables
+  vars_prompt:
+    - name: "wifi_password"
+      prompt: "Enter McLellan Wifi password"
+      private: yes
+
   vars:
     - wificlient_networks:
        - ssid: McLellan
-         psk: minceontoast
+         psk: {{ wifi_password }}
 
   roles:
     - common

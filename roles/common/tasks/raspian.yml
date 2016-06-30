@@ -78,3 +78,7 @@
 
 # Reboot due to possible changes now
 - meta: flush_handlers
+
+# TODO:
+# - Use ramdisk for /tmp and /var/log
+# - Disable LEDs

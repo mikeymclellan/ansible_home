@@ -1,8 +1,12 @@
 ---
 
 - name: create user account
-  user: name={{ username }} shell=/bin/bash groups=adm,dialout,cdrom,sudo,audio,video,plugdev,games,users,netdev,gpio,i2c,spi,input append=yes state=present password=$6$Y/yEFkcLXcuAaQ$EY3dBMxqPzh9gdt7qWBu4hC0YVOtIVfyvHev.7.oCfwGn4fOABzSKtraENtJZ4Zbt9gRYedwDT.zjnRy0
+  user: name={{ admin_account.username }} shell=/bin/bash groups=adm,dialout,cdrom,sudo,audio,video,plugdev,games,users,netdev,gpio,i2c,spi,input append=yes state=present password={{ admin_account.crypted_password }}
 
 - name: Add Mikeys SSH keys
   authorized_key: user=pi state=present key={{ ssh_public_key }}
-  authorized_key: user={{ username }} state=present key={{ ssh_public_key }}
+  authorized_key: user={{ admin_account.username }} state=present key={{ ssh_public_key }}
+
+
+# TODO:
+# - Add NOPASSWD to /etc/sudoers
