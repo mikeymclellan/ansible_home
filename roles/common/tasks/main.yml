@@ -47,23 +47,18 @@
     - iw
   notify: reboot
 
-- name: Run api-update
+- name: Run rpi-update
   shell: "rpi-update"
 
-- name: Autoremove any unused packages
-  shell: "apt-get autoremove --assume-yes --purge"
-  register: autoremove_output
-  changed_when: "'The following packages will be REMOVED' in autoremove_output.stdout"
-
-- name: Autoclean the system
-  shell: "apt-get autoclean --assume-yes"
+#- name: Autoremove any unused packages
+#  apt: autoremove=yes purge=yes
+#  register: autoremove_output
+#  changed_when: "'The following packages will be REMOVED' in autoremove_output.stdout"
 
 - name: Some shell aliases for the user
   lineinfile: dest=/home/{{ ansible_ssh_user }}/.bashrc line="{{ item }}"
   with_items:
-  - "alias ll='ls -l'"
-  - "alias la='ls -la'"
-  - "alias lt='ls -lat'"
+  - "alias ls='ls -lhG'"
 
 - name: Disable logging to /dev/xconsole   # By default nobody reads from /dev/xconsole and thus it overflows causing "action 'action 17' suspended" errors to syslog
   replace:

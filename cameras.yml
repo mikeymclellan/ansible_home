@@ -1,7 +1,7 @@
 ---
 - hosts: cameras
   remote_user: pi
-  sudo: yes
+  become_user: root
 
   roles:
     - camera

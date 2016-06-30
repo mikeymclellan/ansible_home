@@ -3,7 +3,8 @@
 
 - hosts: pis
   remote_user: pi
-  sudo: yes
+  become_user: root
+  become: yes
 
   vars:
     - wificlient_networks:

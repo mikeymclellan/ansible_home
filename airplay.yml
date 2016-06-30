@@ -3,7 +3,7 @@
 
 - hosts: airplay
   remote_user: pi
-  sudo: yes
+  become_user: root
 
   roles:
     - airplay
