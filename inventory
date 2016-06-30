@@ -1,7 +1,9 @@
 [pis]
-peggy hostname=peggy
-files hostname=files
-telly hostname=telly
+192.168.1.5 hostname=kitchen
+
+#peggy hostname=peggy
+#files hostname=files
+#telly hostname=telly
 
 [airplay]
 peggy
