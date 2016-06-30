@@ -1,6 +1,6 @@
 ---
 admin_account:
     username: mikey
-    crypted_password: $6$Y/yEFkcLXcuAaQ$EY3dBMxqPzh9gdt7qWBu4hC0YVOtIVfyvHev.7.oCfwGn4fOABzSKtraENtJZ4Zbt9gRYedwDT.zjnRy0
+    crypted_password: $6$rlmcNZIc$AjoRyPukl.bBx4hKI58m6qFWYMYeRhSMiK1YWw7Vw2lwnRDWoHSoGNjs8BHXZoYo7N5bl2aXbXJAEL1i1bFCU/
 
 ssh_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDZ/clCOl4jQdWHCOtEr+qhbTT35iZ7/Yp9zYQ1O2TulJYz2x1/k3ppzBRrBo51+AUO/YUZ0AN6Pep0OAEpRCgbopeFZgr9xv/Hj9V2mBnsGi9VA/hWFHClkdjBa9dkC23OZTnIou3SsrClyuV1aC/IELhFYgMW4E5D2HQbetMhZwnDBz5M694Yes54S+2Jrq3y/nTOAUiDorkJTiIXTPFb9QQclDakPbC85GvBTRERdAYCxSAT03fnXwwbcCS6w2ZY89aCJzwOAxSezzhqaj8g55xw4sLNZpjHowW8Isu3ZswlWOFWuT2kDRBh7Fxt56OlNTnGNk30zDNnfAXeGTKN mikey@laptop.mclellan.org.nz
