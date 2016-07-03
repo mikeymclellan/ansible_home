@@ -13,7 +13,7 @@
     - libssl-dev
 
 - name: Get shairport-sync source from GitHub
-  git: src=https://github.com/mikebrady/shairport-sync.git dest=/users/pi
+  git: repo=https://github.com/mikebrady/shairport-sync.git dest=/root/shairport-sync force=yes
 
 - name: Add shairport-sync group
   group: name=shairport-sync state=present
@@ -24,7 +24,7 @@
 - name: Build shairport-sync
   shell: "{{ item }}"
   args:
-    chdir: /users/pi/shairport-sync
+    chdir: /root/shairport-sync
   with_items:
     - autoreconf -i -f
     - ./configure --with-alsa --with-avahi --with-ssl=openssl --with-systemd

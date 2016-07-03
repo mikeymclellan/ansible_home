@@ -9,5 +9,5 @@
   roles:
     - airplay
 
-#  handlers:
-#    - include: handlers/handlers.yml
+  handlers:
+    - include: handlers/handlers.yml
