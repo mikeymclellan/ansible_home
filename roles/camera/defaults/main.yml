@@ -1,0 +1,4 @@
+---
+gst_source_params: rpicamsrc bitrate=1000000 rotation=270 sensor-mode=2 annotation-mode=8 annotation-text-colour=0x8080FF
+rtmp_destination_host: localhost
+rtmp_stream_name: "{{ inventory_hostname }}"

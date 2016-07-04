@@ -1,0 +1,11 @@
+---
+- hosts: rtmp_servers
+  remote_user: pi
+  become_user: root
+  become: yes
+
+  roles:
+    - rtmp
+
+  handlers:
+    - include: handlers/handlers.yml

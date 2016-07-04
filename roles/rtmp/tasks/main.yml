@@ -1,0 +1,49 @@
+---
+- name: Get nginx-rtmp-module source from GitHub
+  git: repo=git://github.com/arut/nginx-rtmp-module.git dest=/root/nginx-rtmp-module force=yes
+
+- name: Get nginx source
+  unarchive: src=http://nginx.org/download/nginx-1.4.1.tar.gz dest=/root copy=no
+
+- name: Install prerequisites
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - curl
+    - build-essential
+    - libpcre3-dev
+    - libpcre++-dev
+    - zlib1g-dev
+    - libcurl4-openssl-dev
+    - libssl-dev
+
+- name: Build nginx
+  shell: "{{ item }}"
+  args:
+    chdir: /root/nginx-1.4.1
+    creates: /usr/sbin/nginx
+  with_items:
+    - ./configure --prefix=/var/www --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --pid-path=/var/run/nginx.pid --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-http_ssl_module --without-http_proxy_module --add-module=/root/nginx-rtmp-module
+    - make
+    - make install
+
+- name: Create html folder
+  file: path=/var/www/html state=directory mode=0755
+
+- name: Create htpasswd
+  template: src=htpasswd dest=/etc/nginx/.htpasswd
+
+- name: Create nginx.conf
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
+
+- name: Create nginx systemd
+  template: src=nginx.service.j2 dest=/etc/systemd/system/nginx.service
+
+- name: Create index.php
+  template: src=index.php.j2 dest=/var/www/html/index.php
+
+- name: Install Strobe Media SWF
+  unarchive: src=StrobeMediaPlayback.zip dest=/var/www/html
+
+- name: Enable & start nginx systemd
+  service: name=nginx enabled=yes state=restarted
+

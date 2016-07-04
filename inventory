@@ -1,13 +1,18 @@
-[pis]
+[raspberry_pis]
 kitchen hostname=kitchen
 
 #peggy hostname=peggy
 #files hostname=files
 #telly hostname=telly
 
-[airplay]
+[airplay_servers]
 kitchen
 #peggy
 
 [cameras]
+kitchen
+#peggy
+
+[rtmp_servers]
+kitchen
 #peggy

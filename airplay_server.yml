@@ -1,7 +1,7 @@
 ---
 # airplay playbook: define all the roles for airplay hosts
 
-- hosts: airplay
+- hosts: airplay_servers
   remote_user: pi
   become_user: root
   become: yes

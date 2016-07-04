@@ -25,6 +25,7 @@
   shell: "{{ item }}"
   args:
     chdir: /root/shairport-sync
+    creates: /usr/local/bin/shairport-sync
   with_items:
     - autoreconf -i -f
     - ./configure --with-alsa --with-avahi --with-ssl=openssl --with-systemd

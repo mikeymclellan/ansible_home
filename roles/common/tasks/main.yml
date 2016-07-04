@@ -1,9 +1,9 @@
 ---
 - name: set hostname
-  hostname: name={{ hostname }}
+  hostname: name={{ inventory_hostname }}
 
 - name: New hostname also to /etc/hosts file
-  lineinfile: dest=/etc/hosts regexp='^127\.0\.1\.1' line='127.0.1.1 {{ hostname }}'
+  lineinfile: dest=/etc/hosts regexp='^127\.0\.1\.1' line='127.0.1.1 {{ inventory_hostname }}'
 
 - name: "Build hosts file"
   lineinfile: dest=/etc/hosts regexp='.*{{ item }}$' line="{{ hostvars[item].ansible_default_ipv4.address }} {{item}}" state=present
@@ -18,42 +18,42 @@
   command: dpkg-reconfigure -f noninteractive tzdata
   when: timezone_result.changed
 
-- name: Update the apt cache
-  apt: update_cache=yes cache_valid_time=7200
+#- name: Update the apt cache
+#  apt: update_cache=yes cache_valid_time=7200
+#
+#- name: Update the Raspbian distribution
+#  apt: upgrade=yes
+#  when: apt_upgrade == true
+#  notify: reboot
 
-- name: Update the Raspbian distribution
-  apt: upgrade=yes
-  when: apt_upgrade == true
-  notify: reboot
+#- name: Install/update some basic tools
+#  apt: pkg={{ item }} state=latest
+#  with_items:
+#    - unattended-upgrades
+#    - build-essential
+#    - git
+#    - curl
+#    - htop
+#    - nmap
+#    - tmux
+#    - zsh
+#    - nmon
+#    - dstat
+#    - rpi-update
+#    - haveged
+#    - avahi-daemon
+#    - rng-tools
+#    - netatalk
+#    - screen
+#    - dnsutils
+#    - wavemon
+#    - telnet
+#    - speedtest-cli
+#    - iw
+#  notify: reboot
 
-- name: Install/update some basic tools
-  apt: pkg={{ item }} state=latest
-  with_items:
-    - unattended-upgrades
-    - build-essential
-    - git
-    - curl
-    - htop
-    - nmap
-    - tmux
-    - zsh
-    - nmon
-    - dstat
-    - rpi-update
-    - haveged
-    - avahi-daemon
-    - rng-tools
-    - netatalk
-    - screen
-    - dnsutils
-    - wavemon
-    - telnet
-    - speedtest-cli
-    - iw
-  notify: reboot
-
-- name: Run rpi-update
-  shell: "rpi-update"
+#- name: Run rpi-update
+#  shell: "rpi-update"
 
 #- name: Autoremove any unused packages
 #  apt: autoremove=yes purge=yes
@@ -75,6 +75,15 @@
 - name: Enable SPI
   lineinfile: dest=/boot/config.txt regexp='^#(dtparam=spi=on)$' line='\1' backrefs=yes
   notify: reboot
+
+- name: Use tmpfs for tmp folder
+  lineinfile: dest=/etc/fstab line='tmpfs           /tmp              tmpfs   defaults,noatime,mode=1777 0       0'
+
+- name: Use tmpfs for log folder
+  lineinfile: dest=/etc/fstab line='tmpfs           /var/log          tmpfs   defaults,noatime,mode=0755 0       0'
+
+- name: Use tmpfs for lock folder
+  lineinfile: dest=/etc/fstab line='tmpfs           /var/lock         tmpfs   defaults,noatime,mode=0755 0       0'
 
 - include: user.yml
 

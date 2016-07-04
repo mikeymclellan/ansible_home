@@ -1,7 +1,7 @@
 ---
 # pis playbook: define all the roles for pis
 
-- hosts: pis
+- hosts: raspberry_pis
   remote_user: pi
   become_user: root
   become: yes

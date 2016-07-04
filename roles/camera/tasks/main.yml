@@ -1,3 +1,11 @@
 ---
-- name: set hostname
-  hostname: name={{ hostname }}
+- name: Install gstreamer
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - gstreamer1.0-tools
+
+- name: Create stream systemd
+  template: src=stream.service.j2 dest=/etc/systemd/system/{{ rtmp_stream_name }}.stream.service
+
+- name: Enable & start stream systemd
+  service: name={{ rtmp_stream_name }}.stream enabled=yes state=restarted

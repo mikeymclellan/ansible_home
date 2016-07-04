@@ -1,5 +1,5 @@
 ---
-wificlient_interface: wlan1
+wificlient_interface: wlan0
   
 wificlient_networks:
   - ssid: defaultssid

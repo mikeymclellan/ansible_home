@@ -1,0 +1,54 @@
+<?php
+
+if (strstr($_SERVER['HTTP_USER_AGENT'], 'iPhone')) {
+
+    header('Location: rtmp://'.$_SERVER['HTTP_HOST'].'/rtmp/live');
+    exit();
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>{{ inventory_hostname }} Cam</title>
+<!-- strobe -->
+<script type="text/javascript" src="strobe/lib/swfobject.js"></script>
+<script type="text/javascript">
+    var parameters = {
+         src: "rtmp://<?php echo $_SERVER['HTTP_HOST'] ?>/rtmp/live",
+         autoPlay: true,
+         controlBarAutoHide: false,
+         playButtonOverlay: true,
+         showVideoInfoOverlayOnStartUp: false,
+         optimizeBuffering : false,
+         initialBufferTime : 0.1,
+         expandedBufferTime : 0.1,
+         minContinuousPlayback : 0.1,
+         poster: "images/poster.png"
+    };
+    swfobject.embedSWF(
+        "strobe/StrobeMediaPlayback.swf"
+        , "StrobeMediaPlayback"
+        , 1024
+        , 768
+        , "10.1.0"
+        , "strobe/expressInstall.swf"
+        , parameters
+        , {
+            allowFullScreen: "true"
+        }
+        , {
+            name: "StrobeMediaPlayback"
+        }
+    );
+</script>
+
+
+</head>
+<body>
+        <div id="StrobeMediaPlayback"></div>
+        <p>
+                <a href="rtmp://<?php echo $_SERVER['HTTP_HOST'] ?>/rtmp/live">Mobile View</a>
+        </p>
+</body>
+</html>
