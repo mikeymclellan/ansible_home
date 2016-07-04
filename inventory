@@ -1,9 +1,9 @@
 [raspberry_pis]
-kitchen hostname=kitchen
+kitchen
 
-#peggy hostname=peggy
-#files hostname=files
-#telly hostname=telly
+#peggy
+#files
+#telly
 
 [airplay_servers]
 kitchen
