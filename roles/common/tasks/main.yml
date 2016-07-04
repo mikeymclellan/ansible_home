@@ -2,9 +2,6 @@
 - name: set hostname
   hostname: name={{ inventory_hostname }}
 
-- name: New hostname also to /etc/hosts file
-  lineinfile: dest=/etc/hosts regexp='^127\.0\.1\.1' line='127.0.1.1 {{ inventory_hostname }}'
-
 - name: "Build hosts file"
   lineinfile: dest=/etc/hosts regexp='.*{{ item }}$' line="{{ hostvars[item].ansible_default_ipv4.address }} {{item}}" state=present
   when: hostvars[item].ansible_default_ipv4.address is defined
