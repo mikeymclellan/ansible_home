@@ -13,6 +13,9 @@ kitchen
 kitchen
 #peggy
 
+[seafile_servers]
+kitchen
+
 [rtmp_servers]
 kitchen
 #peggy
