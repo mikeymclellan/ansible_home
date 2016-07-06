@@ -1,0 +1,54 @@
+---
+# Update apt, this is quite slow and only needs to be run once so it's not included in the main playbook
+
+- hosts: raspberry_pis
+  remote_user: pi
+  become_user: root
+  become: yes
+
+  tasks:
+
+    - name: Update the apt cache
+      apt: update_cache=yes cache_valid_time=7200
+
+    - name: Update the Raspbian distribution
+      apt: upgrade=yes
+      when: apt_upgrade == true
+      notify: reboot
+
+    - name: Install/update some basic tools
+      apt: pkg={{ item }} state=latest
+      with_items:
+        - unattended-upgrades
+        - build-essential
+        - git
+        - curl
+        - htop
+        - nmap
+        - tmux
+        - zsh
+        - nmon
+        - dstat
+        - rpi-update
+        - haveged
+        - avahi-daemon
+        - rng-tools
+        - netatalk
+        - screen
+        - dnsutils
+        - wavemon
+        - telnet
+        - speedtest-cli
+        - iw
+      notify: reboot
+
+    - name: Run rpi-update
+      shell: "rpi-update"
+
+    #- name: Autoremove any unused packages
+    #  apt: autoremove=yes purge=yes
+    #  register: autoremove_output
+    #  changed_when: "'The following packages will be REMOVED' in autoremove_output.stdout"
+
+  handlers:
+    - include: handlers/handlers.yml
