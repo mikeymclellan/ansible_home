@@ -32,6 +32,8 @@
     - make
     - make install
 
+- name: Create shairport-sync.conf
+  template: src=shairport-sync.conf.j2 dest=/etc/shairport-sync.conf
+
 - name: Enable shairport-sync systemd
-  service: name=shairport-sync enabled=yes
-  notify: reboot
+  service: name=shairport-sync enabled=yes state=started
