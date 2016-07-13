@@ -1,21 +1,17 @@
 [raspberry_pis]
 kitchen
-
-#peggy
-#files
-#telly
+peggy
+telly
 
 [airplay_servers]
 kitchen
-#peggy
 
 [cameras]
-kitchen
-#peggy
+peggy   rtmp_destination_host=kitchen
+kitchen rtmp_destination_host=kitchen
 
 [seafile_servers]
 kitchen
 
 [rtmp_servers]
 kitchen
-#peggy

@@ -26,6 +26,14 @@
     regexp='^daemon.*mail(.|\n)*?/dev/xconsole'
     replace='# Removed by Ansible'
 
+- name: Set some /boot/config.txt parameters
+  lineinfile:
+    dest: /boot/config.txt
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^max_usb_current=1', line: 'max_usb_current=1' }
+
 - name: Enable SPI
   lineinfile: dest=/boot/config.txt regexp='^#(dtparam=spi=on)$' line='\1' backrefs=yes
   notify: reboot
