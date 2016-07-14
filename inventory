@@ -7,7 +7,7 @@ telly
 kitchen
 
 [cameras]
-peggy   rtmp_destination_host=kitchen
+peggy   rtmp_destination_host=localhost
 kitchen rtmp_destination_host=kitchen
 
 [seafile_servers]

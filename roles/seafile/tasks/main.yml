@@ -17,3 +17,5 @@
 - name: Enable & start seahub systemd
   service: name=seahub enabled=yes state=started
 
+- name: Add Duck DNS cronjob
+  cron: name="Update Duck DNS" minute="*/5" job="echo url="https://www.duckdns.org/update?domains=mclellan&token=8e2e13b4-748e-4c0d-ba0c-aeb5e56beb8e&ip=" | curl -k -K - > /dev/null 2>&1"
