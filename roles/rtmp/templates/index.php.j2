@@ -14,8 +14,10 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], 'iPhone')) {
 <!-- strobe -->
 <script type="text/javascript" src="strobe/lib/swfobject.js"></script>
 <script type="text/javascript">
-    var parameters = {
-         src: "rtmp://<?php echo $_SERVER['HTTP_HOST'] ?>/rtmp/live",
+{% for host in groups['cameras'] %}
+
+    var parameters{{ host }} = {
+         src: "rtmp://<?php echo $_SERVER['HTTP_HOST'] ?>/rtmp/{{ hostvars[host]['rtmp_stream_name'] | default(host) }}",
          autoPlay: true,
          controlBarAutoHide: false,
          playButtonOverlay: true,
@@ -28,12 +30,12 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], 'iPhone')) {
     };
     swfobject.embedSWF(
         "strobe/StrobeMediaPlayback.swf"
-        , "StrobeMediaPlayback"
+        , "StrobeMediaPlayback{{ host }}"
         , 1024
         , 768
         , "10.1.0"
         , "strobe/expressInstall.swf"
-        , parameters
+        , parameters{{ host }}
         , {
             allowFullScreen: "true"
         }
@@ -41,14 +43,19 @@ if (strstr($_SERVER['HTTP_USER_AGENT'], 'iPhone')) {
             name: "StrobeMediaPlayback"
         }
     );
+{% endfor %}
 </script>
 
 
 </head>
 <body>
-        <div id="StrobeMediaPlayback"></div>
+
+{% for host in groups['cameras'] %}
+        <div id="StrobeMediaPlayback{{ host }}"></div>
         <p>
-                <a href="rtmp://<?php echo $_SERVER['HTTP_HOST'] ?>/rtmp/live">Mobile View</a>
+                <a href="rtmp://<?php echo $_SERVER['HTTP_HOST'] ?>/rtmp/{{ hostvars[host]['rtmp_stream_name'] | default(host) }}">{{ host }}</a>
         </p>
+{% endfor %}
+
 </body>
 </html>

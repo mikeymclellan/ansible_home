@@ -3,7 +3,7 @@
   file: path=/mnt/external state=directory mode=0755
 
 - name: Add mount to fstab
-  lineinfile: dest=/etc/fstab regexp="{{ usb_disk_uuid }}" line="UUID={{ usb_disk_uuid }} /mnt/external ext4 defaults 0 2"
+  lineinfile: dest=/etc/fstab regexp="{{ usb_disk_uuid }}" line="UUID={{ usb_disk_uuid }} /mnt/external ext4 nofail 0 2"
 
 - name: Create seafile systemd
   template: src=seafile.service.j2 dest=/etc/systemd/system/seafile.service
