@@ -12,6 +12,3 @@ kitchen rtmp_destination_host=kitchen
 
 [seafile_servers]
 kitchen
-
-[rtmp_servers]
-kitchen

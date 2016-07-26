@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/usr/bin/raspivid -n -w 1280 -h 720 -b 4500000 -fps 30 -vf -hf -t 0 -o - | /usr/bin/cvlc stream:///dev/stdin --sout '#rtp{sdp=rtsp://:5540/}' :demux=h264
