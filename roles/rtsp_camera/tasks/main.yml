@@ -21,4 +21,6 @@
 - name: Enable & start stream systemd
   service: name=stream enabled=yes state=restarted
 
-
+- name: Add bcm2835-v4l2 to /etc/modules
+  lineinfile: dest=/etc/modules regexp='^bcm2835-v4l2' line='bcm2835-v4l2' state=present
+  notify: reboot
