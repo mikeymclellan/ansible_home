@@ -24,3 +24,25 @@
 - name: Add bcm2835-v4l2 to /etc/modules
   lineinfile: dest=/etc/modules regexp='^bcm2835-v4l2' line='bcm2835-v4l2' state=present
   notify: reboot
+
+- name: Install prerequisites
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - subversion
+    - libjpeg8-dev
+    - imagemagick
+    - libv4l-0
+    - libv4l-dev
+    - uvcdynctrl
+
+- name: Get mjpg-streamer source
+  subversion: repo=https://svn.code.sf.net/p/mjpg-streamer/code/mjpg-streamer/ dest=/root/mjpg-streamer
+
+- name: Build mjpg-streamer
+  shell: "{{ item }}"
+  args:
+    chdir: /root/mjpg-streamer
+    creates: /usr/local/bin/mjpg_streamer
+  with_items:
+    - make USE_LIBV4L2=true clean all
+    - sudo make install
