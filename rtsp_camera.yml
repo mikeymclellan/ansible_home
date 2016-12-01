@@ -1,4 +1,5 @@
 ---
+# Deprecated
 - hosts: cameras
   remote_user: pi
   become_user: root

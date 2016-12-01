@@ -3,4 +3,4 @@
 # Master playbook; include all the other machine group playbooks
 - include: raspberry_pi.yml
 - include: airplay_server.yml
-- include: rtsp_camera.yml
+- include: seafile_server.yml
