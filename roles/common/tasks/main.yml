@@ -48,3 +48,4 @@
   lineinfile: dest=/etc/fstab line='tmpfs           /var/lock         tmpfs   defaults,noatime,mode=0755 0       0'
 
 - include: user.yml
+- include: distribute_ssh_keys.yml

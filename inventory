@@ -1,14 +1,14 @@
 [raspberry_pis]
 kitchen
-peggy
+office
 telly
 
 [airplay_servers]
 kitchen
 
-[cameras]
-peggy   rtmp_destination_host=kitchen
-kitchen rtmp_destination_host=kitchen
-
 [seafile_servers]
 kitchen
+
+[kerberosio_machinery_servers]
+kitchen
+office mount_remote_external=true

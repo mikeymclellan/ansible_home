@@ -1,0 +1,38 @@
+---
+- name: Install prerequisites
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - git
+    - libav-tools
+    - cmake
+    - subversion
+    - dh-autoreconf
+    - libcurl4-openssl-dev
+
+- name: Get kerberos.io machinery source
+  git: repo=https://github.com/kerberos-io/machinery dest=/root/kerberosio-machinery force=yes
+
+- file: path=/root/kerberosio-machinery/build state=directory
+
+- name: Build kerberos.io machinery
+  shell: "{{ item }}"
+  args:
+    chdir: /root/kerberosio-machinery/build
+    creates: /usr/bin/kerberosio
+  with_items:
+    - cmake ..
+    - make
+    - make check
+    - make install
+
+- name: Update kerberosio config
+  lineinfile: dest=/etc/opt/kerberosio/config/config.xml regexp="<name type=\"text\">" line="<name type=\"text\">{{ inventory_hostname }}</name>"
+
+- name: Update kerberosio config
+  lineinfile: dest=/etc/opt/kerberosio/config/config.xml regexp="<timezone type=\"timezone\">" line="<timezone type=\"timezone\">Pacific-Auckland</timezone>"
+
+- include: mount_remote_external.yml
+  when: mount_remote_external
+
+- name: Enable systemd
+  service: name=kerberosio enabled=yes state=started

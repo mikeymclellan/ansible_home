@@ -1,0 +1,11 @@
+---
+- hosts: kerberosio_machinery_servers
+  remote_user: pi
+  become_user: root
+  become: yes
+
+  roles:
+    - kerberosio_machinery
+
+  handlers:
+    - include: handlers/handlers.yml

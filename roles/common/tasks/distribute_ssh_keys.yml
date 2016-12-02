@@ -1,0 +1,20 @@
+---
+- name: fetch all public ssh keys
+  shell: "cat ~{{ admin_account.username }}/.ssh/id_rsa.pub"
+  register: ssh_keys
+  tags:
+    - ssh
+
+- name: check keys
+  debug: msg="{{ ssh_keys.stdout }}"
+  tags:
+    - ssh
+
+- name: deploy keys on all servers
+  authorized_key: user={{ admin_account.username }} state=present key={{ item[0] }}
+  delegate_to: "{{ item[1] }}"
+  with_nested:
+    - "{{ ssh_keys.stdout }}"
+    - "{{groups['raspberry_pis']}}"
+  tags:
+    - ssh

@@ -1,0 +1,14 @@
+---
+- name: Install prerequisites
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - sshfs
+
+- name: Add remote mount to fstab
+  mount:
+    name: /etc/opt/kerberosio/capture
+    src: "{{ admin_account.username }}@kitchen:/etc/opt/kerberosio/capture"
+    fstype: fuse.sshfs
+    opts: allow_other,IdentityFile=/home/{{ admin_account.username }}/.ssh/id_rsa
+    state: mounted
+
