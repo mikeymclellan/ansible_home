@@ -1,9 +1,0 @@
-#!/bin/bash
-
-#/usr/bin/raspivid -n -w 1280 -h 720 -b 4500000 -fps 30 -vf -hf -t 0 -o - | /usr/bin/cvlc stream:///dev/stdin --sout '#rtp{sdp=rtsp://:5540/}' :demux=h264
-
-# /usr/bin/vlc v4l2:// :v4l2-dev=/dev/video0 :v4l2-width=1024 :v4l2-height=768 --sout="#transcode{vcodec=h264,vb=800,scale=1,acodec=none}:rtp{sdp=rtsp://:5540/}" -I dummy
-
-# /usr/bin/raspivid -n -w 1024 -h 768  -t 0 -o - | /usr/bin/cvlc stream:///dev/stdin --sout '#rtp{sdp=rtsp://:5540/}' :demux=h264
-
-/usr/local/bin/mjpg_streamer -i "/usr/local/lib/input_uvc.so -y -n -f 5 -r 1024x768" -o "/usr/local/lib/output_http.so -p 10088 -w /usr/local/www"

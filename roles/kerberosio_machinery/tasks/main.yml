@@ -9,12 +9,25 @@
     - dh-autoreconf
     - libcurl4-openssl-dev
 
+- name: Get recent version of Raspberry Pi userland tools
+  git: repo=https://github.com/raspberrypi/userland dest=/root/userland force=yes
+
+- file: path=/root/userland/build state=directory
+
+- name: Build Raspberry Pi userland tools
+  shell: "{{ item }}"
+  args:
+    chdir: /root/userland/build
+    creates: /opt/vc/lib/libmmal.so
+  with_items:
+    - cmake ..
+    - make
+    - make install
+
 - name: Get kerberos.io machinery source
   git: repo=https://github.com/kerberos-io/machinery dest=/root/kerberosio-machinery force=yes
 
 - file: path=/root/kerberosio-machinery/build state=directory
-
-# Potentially checkout /root/kerberosio-machinery/build/raspicamera to revision a82bbfa08245ffecd0926bf6d95dbea923ffd79e until RGB fix is in master
 
 - name: Build kerberos.io machinery
   shell: "{{ item }}"
@@ -33,8 +46,8 @@
 - name: Update kerberosio config
   lineinfile: dest=/etc/opt/kerberosio/config/config.xml regexp="<timezone type=\"timezone\">" line="<timezone type=\"timezone\">Pacific-Auckland</timezone>"
 
-- include: mount_remote_external.yml
-  when: mount_remote_external
+- name: Update kerberosio cloud config
+  template: src=cloud.xml.j2 dest=/etc/opt/kerberosio/config/cloud.xml
 
 - name: Enable systemd
   service: name=kerberosio enabled=yes state=started

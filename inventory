@@ -1,6 +1,6 @@
 [raspberry_pis]
 kitchen
-office
+brew-fridge
 telly
 
 [airplay_servers]
@@ -11,4 +11,4 @@ kitchen
 
 [kerberosio_machinery_servers]
 kitchen
-office mount_remote_external=true
+
