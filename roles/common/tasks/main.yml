@@ -47,5 +47,13 @@
 - name: Use tmpfs for lock folder
   lineinfile: dest=/etc/fstab line='tmpfs           /var/lock         tmpfs   defaults,noatime,mode=0755 0       0'
 
+#- cron:
+#    name: Update Duck DNS
+#    minute: */5
+#    job: echo url="https://www.duckdns.org/update?domains=mclellan&token=8e2e13b4-748e-4c0d-ba0c-aeb5e56beb8e&ip=" | curl -k -K - > /dev/null 2>&1
+
 - include: user.yml
-- include: distribute_ssh_keys.yml
+
+# Disable distributing all mikey's SSH keys to all hosts as it fails when one machine is down or we're not at home.
+# Plus we can just forward our SSH keys which is nicer.
+#- include: distribute_ssh_keys.yml
