@@ -57,3 +57,6 @@
 # Disable distributing all mikey's SSH keys to all hosts as it fails when one machine is down or we're not at home.
 # Plus we can just forward our SSH keys which is nicer.
 #- include: distribute_ssh_keys.yml
+
+- name: Enable ssh
+  service: name=ssh enabled=yes state=started
