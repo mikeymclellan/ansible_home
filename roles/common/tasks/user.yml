@@ -3,11 +3,11 @@
 - name: create user account
   user: name={{ admin_account.username }} shell=/bin/bash groups=adm,dialout,cdrom,sudo,audio,video,plugdev,games,users,netdev,gpio,i2c,spi,input append=yes password={{ admin_account.crypted_password }} state=present generate_ssh_key=yes
 
-- name: update pi password
-  user: name=pi shell=/bin/bash append=yes password={{ admin_account.crypted_password }} state=present
-
 - name: Add Mikeys SSH key to pi
   authorized_key: user=pi state=present key={{ admin_account.ssh_public_key }}
+
+- name: update pi password
+  user: name=pi shell=/bin/bash append=yes password={{ admin_account.crypted_password }} state=present
 
 - name: Add Mikeys SSH key to mikey
   authorized_key: user={{ admin_account.username }} state=present key={{ admin_account.ssh_public_key }}

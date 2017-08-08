@@ -2,13 +2,14 @@
 kitchen
 brew-fridge
 telly
+attic
 
 [airplay_servers]
 kitchen
 
 [seafile_servers]
-kitchen
 
 [kerberosio_machinery_servers]
 kitchen
+attic
 

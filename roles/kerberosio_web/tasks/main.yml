@@ -1,0 +1,65 @@
+---
+
+- name: Add non-free apt repo
+  apt_repository:
+    repo: deb http://mirrordirector.raspbian.org/raspbian/ stretch main contrib non-free rpi
+    state: present
+    update_cache: yes
+
+- name: Install prerequisites
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - git
+    - php7.0-cli
+    - php7.0-gd
+    - php7.0-mcrypt
+    - php7.0-curl
+    - php7.0-mbstring
+    - php7.0-dom
+    - php7.0-zip
+    - php7.0-fpm
+    - nodejs
+    - npm
+    - nginx
+    - composer
+
+- name: Update nginx config
+  template: src=default.j2 dest=/etc/nginx/sites-enabled/default
+
+- file: path=/var/www state=directory
+
+- name: Get Kerberos.io web from github
+  git: repo=https://github.com/kerberos-io/web dest=/var/www/web force=yes
+
+- composer:
+    command: install
+    working_dir: /var/www/web
+
+- file:
+    path: /var/www/web/storage
+    mode: "u=rwX,g=rwX,o=rwX"
+    recurse: yes
+
+- file:
+    path: /var/www/web/bootstrap/cache
+    mode: "u=rwX,g=rwX,o=rwX"
+    recurse: yes
+
+- file:
+    path: /var/www/web/config/kerberos.php
+    mode: "u=rwX,g=rwX,o=rwX"
+
+- npm:
+    name: bower
+    global: yes
+
+- file:
+    src: /usr/bin/nodejs
+    dest: /usr/bin/node
+    owner: root
+    group: root
+    state: link
+
+- shell: bower --allow-root install
+  args:
+    chdir: /var/www/web/public

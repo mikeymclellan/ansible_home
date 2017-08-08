@@ -6,6 +6,7 @@
 
   roles:
     - kerberosio_machinery
+    - kerberosio_web
 
   handlers:
     - include: handlers/handlers.yml

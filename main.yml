@@ -3,4 +3,4 @@
 # Master playbook; include all the other machine group playbooks
 - include: raspberry_pi.yml
 - include: airplay_server.yml
-- include: kerberosio_machinery.yml
+- include: kerberosio.yml

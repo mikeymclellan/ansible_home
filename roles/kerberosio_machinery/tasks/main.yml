@@ -51,3 +51,9 @@
 
 - name: Enable systemd
   service: name=kerberosio enabled=yes state=started
+
+- cron:
+    name: Clear out old capture files
+    minute: 5
+    hour: 4
+    job: find /etc/opt/kerberosio/capture/ -mtime +7 -exec rm {} \;
