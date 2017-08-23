@@ -56,4 +56,7 @@
     name: Clear out old capture files
     minute: 5
     hour: 4
-    job: find /etc/opt/kerberosio/capture/ -mtime +7 -exec rm {} \;
+    job: find /etc/opt/kerberosio/capture/ -mtime +4 -exec rm {} \;
+
+- name: Disable Camera LED
+  lineinfile: dest=/boot/config.txt regexp='^disable_camera_led$' line='disable_camera_led=1'
