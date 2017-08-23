@@ -26,6 +26,9 @@
 - name: Update nginx config
   template: src=default.j2 dest=/etc/nginx/sites-enabled/default
 
+- name: Create nginx log dir in temfs when stating
+  lineinfile: dest=/etc/systemd/system/multi-user.target.wants/nginx.service regexp='mkdir' line='ExecStartPre=/bin/sh -c "if [ ! -d /var/log/nginx ] ; then /bin/mkdir /var/log/nginx ; fi ; /usr/sbin/nginx -t"' insertafter="\[Service\]"
+
 - file: path=/var/www state=directory
 
 - name: Get Kerberos.io web from github
