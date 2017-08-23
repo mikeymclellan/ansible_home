@@ -1,0 +1,20 @@
+---
+
+- name: Install prerequisites
+  apt: pkg=software-properties-common state=latest
+
+# This Repo dun work
+#- name: Kodi repo
+#  apt_repository:
+#    repo: ppa:team-xbmc/ppa
+#    state: present
+#    update_cache: yes
+
+- name: Install Kodi
+  apt: pkg=kodi state=latest
+
+- name: Add systemd service for Kodi
+  template: src=kodi.service.j2 dest=/etc/systemd/system/kodi.service
+
+- name: Enable Kodi systemd
+  service: name=kodi enabled=yes state=started

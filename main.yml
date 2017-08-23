@@ -4,3 +4,4 @@
 - include: raspberry_pi.yml
 - include: airplay_server.yml
 - include: kerberosio.yml
+- include: kodi.yml
