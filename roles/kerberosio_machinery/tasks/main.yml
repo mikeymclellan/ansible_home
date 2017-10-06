@@ -21,7 +21,7 @@
     creates: /opt/vc/lib/libmmal.so
   with_items:
     - cmake ..
-    - make
+    - make -
     - make install
 
 - name: Get kerberos.io machinery source
@@ -36,8 +36,8 @@
     creates: /usr/bin/kerberosio
   with_items:
     - cmake ..
-    - make
-    - make check
+    - make -j4
+    - make -j4 check
     - make install
 
 - name: Update kerberosio config
