@@ -11,6 +11,7 @@
     - avahi-daemon
     - libavahi-client-dev
     - libssl-dev
+    - git
 
 - name: Get shairport-sync source from GitHub
   git: repo=https://github.com/mikebrady/shairport-sync.git dest=/root/shairport-sync force=yes
