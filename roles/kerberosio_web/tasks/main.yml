@@ -29,14 +29,21 @@
 - name: Create nginx log dir in temfs when stating
   lineinfile: dest=/etc/systemd/system/multi-user.target.wants/nginx.service regexp='mkdir' line='ExecStartPre=/bin/sh -c "if [ ! -d /var/log/nginx ] ; then /bin/mkdir /var/log/nginx ; fi ; /usr/sbin/nginx -t"' insertafter="\[Service\]"
 
-- file: path=/var/www state=directory
+- file: path=/var/www state=directory mode=775 group=sudo
 
 - name: Get Kerberos.io web from github
   git: repo=https://github.com/kerberos-io/web dest=/var/www/web force=yes
+  become: no
+
+- composer:
+    command: update
+    working_dir: /var/www/web
+  become: no
 
 - composer:
     command: install
     working_dir: /var/www/web
+  become: no
 
 - file:
     path: /var/www/web/storage
