@@ -1,6 +1,7 @@
 ---
 - name: Install prerequisites
   apt: pkg={{ item }} state=latest
+  update_cache: yes
   with_items:
     - git
     - libav-tools
@@ -8,6 +9,7 @@
     - subversion
     - dh-autoreconf
     - libcurl4-openssl-dev
+    - libssl-dev
 
 - name: Get recent version of Raspberry Pi userland tools
   git: repo=https://github.com/raspberrypi/userland dest=/root/userland force=yes
@@ -25,7 +27,11 @@
     - make install
 
 - name: Get kerberos.io machinery source
-  git: repo=https://github.com/kerberos-io/machinery dest=/root/kerberosio-machinery force=yes
+  git:
+    repo: https://github.com/kerberos-io/machinery
+    dest: /root/kerberosio-machinery
+    force: yes
+#    version: v2.5.1
 
 - file: path=/root/kerberosio-machinery/build state=directory
 
