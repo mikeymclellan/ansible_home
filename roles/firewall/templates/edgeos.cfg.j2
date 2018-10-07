@@ -1,0 +1,213 @@
+firewall {
+    all-ping enable
+    broadcast-ping disable
+    ipv6-receive-redirects disable
+    ipv6-src-route disable
+    ip-src-route disable
+    log-martians enable
+    name WAN_IN {
+        default-action drop
+        description "WAN to internal"
+        rule 10 {
+            action accept
+            description "Allow established/related"
+            state {
+                established enable
+                related enable
+            }
+        }
+        rule 20 {
+            action drop
+            description "Drop invalid state"
+            state {
+                invalid enable
+            }
+        }
+    }
+    name WAN_LOCAL {
+        default-action drop
+        description "WAN to router"
+        rule 10 {
+            action accept
+            description "Allow established/related"
+            state {
+                established enable
+                related enable
+            }
+        }
+        rule 20 {
+            action drop
+            description "Drop invalid state"
+            state {
+                invalid enable
+            }
+        }
+    }
+    receive-redirects disable
+    send-redirects enable
+    source-validation disable
+    syn-cookies enable
+}
+interfaces {
+    ethernet eth0 {
+        duplex auto
+        speed auto
+        vif 10 {
+            address dhcp
+            description Internet
+            firewall {
+                in {
+                    name WAN_IN
+                }
+                local {
+                    name WAN_LOCAL
+                }
+            }
+        }
+    }
+    ethernet eth1 {
+        description Local
+        duplex auto
+        speed auto
+    }
+    ethernet eth2 {
+        description Local
+        duplex auto
+        speed auto
+    }
+    ethernet eth3 {
+        description Local
+        duplex auto
+        speed auto
+    }
+    ethernet eth4 {
+        description Local
+        duplex auto
+        speed auto
+    }
+    loopback lo {
+    }
+    switch switch0 {
+        address 192.168.1.1/24
+        description Local
+        mtu 1500
+        switch-port {
+            interface eth1 {
+            }
+            interface eth2 {
+            }
+            interface eth3 {
+            }
+            interface eth4 {
+            }
+            vlan-aware disable
+        }
+    }
+}
+service {
+    dhcp-server {
+        disabled false
+        hostfile-update disable
+        shared-network-name LAN {
+            authoritative enable
+            subnet 192.168.1.0/24 {
+                default-router 192.168.1.1
+                dns-server 192.168.1.1
+                domain-name mclellan.org.nz
+                lease 86400
+                start 192.168.1.38 {
+                    stop 192.168.1.243
+                }
+                static-mapping attic {
+                    ip-address 192.168.1.14
+                    mac-address b8:27:eb:d3:a5:8b
+                }
+                static-mapping kitchen {
+                    ip-address 192.168.1.11
+                    mac-address b8:27:eb:9d:81:aa
+                }
+                static-mapping telly {
+                    ip-address 192.168.1.3
+                    mac-address b8:27:eb:9f:83:25
+                }
+            }
+        }
+        static-arp disable
+        use-dnsmasq enable
+    }
+    dns {
+        forwarding {
+            cache-size 150
+            listen-on switch0
+            name-server 8.8.8.8
+        }
+    }
+    gui {
+        http-port 80
+        https-port 443
+        older-ciphers enable
+    }
+    nat {
+        rule 5010 {
+            description "masquerade for WAN"
+            outbound-interface eth0.10
+            type masquerade
+        }
+    }
+    ssh {
+        port 22
+        protocol-version v2
+    }
+    unms {
+        disable
+    }
+}
+system {
+    domain-name mclellan.org.nz
+    host-name firewall
+    login {
+        user {{admin_account.username}} {
+            authentication {
+                encrypted-password $6$wRhAOvBLC$SL/LnzPR31ztgOiW1/YOcnC2aVbY4uTj.1SFrUd7M5kthfQfhivfBoZTKrFXBMqD7YN5TvnOqwMUvTvmQIzjn/
+                plaintext-password ""
+                public-keys {{admin_account.username}} {
+                    key {{ admin_account.ssh_public_key_only }}
+                    type ssh-rsa
+                }
+            }
+            full-name "Mikey McLellan"
+            level admin
+        }
+    }
+    name-server 127.0.0.1
+    ntp {
+        server 0.ubnt.pool.ntp.org {
+        }
+        server 1.ubnt.pool.ntp.org {
+        }
+        server 2.ubnt.pool.ntp.org {
+        }
+        server 3.ubnt.pool.ntp.org {
+        }
+    }
+    syslog {
+        global {
+            facility all {
+                level notice
+            }
+            facility protocols {
+                level debug
+            }
+        }
+    }
+    time-zone Pacific/Auckland
+    traffic-analysis {
+        dpi disable
+        export disable
+    }
+}
+
+
+/* Warning: Do not remove the following line. */
+/* === vyatta-config-version: "config-management@1:conntrack@1:cron@1:dhcp-relay@1:dhcp-server@4:firewall@5:ipsec@5:nat@3:qos@1:quagga@2:suspend@1:system@4:ubnt-pptp@1:ubnt-udapi-server@1:ubnt-unms@1:ubnt-util@1:vrrp@1:webgui@1:webproxy@1:zone-policy@1" === */
+/* Release version: v1.10.7.5127989.181001.1227 */

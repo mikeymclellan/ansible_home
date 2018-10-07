@@ -1,0 +1,5 @@
+---
+- name: Upload config
+  edgeos_config:
+    src: edgeos.cfg.j2
+    backup: yes

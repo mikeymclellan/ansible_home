@@ -1,0 +1,7 @@
+---
+
+kerberosio_cloud:
+    bucket: kerberosio
+    folder: capture
+    public_key: {{ vault_kerberosio_cloud.public_key }}
+    private_key: {{ vault_kerberosio_cloud.private_key }}

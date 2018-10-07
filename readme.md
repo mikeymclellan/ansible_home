@@ -1,6 +1,14 @@
-# Ansible Scripts for Raspberry Pis at Home
+# Ansible Scripts for Home Network
 
-Files in `host_vars` and `group_vars` wont be commited so you can safely put sensitive data in there like private keys.
+Currently configures a [EdgeRouter-X](https://www.ubnt.com/edgemax/edgerouter-x/) as the firewall and a bunch of Raspberry Pis.
+
+Typical usage:
+
+```
+ansible-playbook -i inventory main.yml --tags firewall
+```
+
+## Raspberry Pis
 
 ### Flash a new SD card and setup wifi 
 

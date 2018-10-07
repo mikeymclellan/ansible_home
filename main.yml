@@ -1,7 +1,60 @@
 ---
 
-# Master playbook; include all the other machine group playbooks
-- include: raspberry_pi.yml
-- include: airplay_server.yml
-- include: kerberosio.yml
-- include: kodi.yml
+# Master playbook; include all the other group playbooks
+
+- hosts: raspberry_pis
+  remote_user: pi
+  become_user: root
+  become: yes
+  tags: raspberry_pis
+
+  roles:
+    - common
+    - wificlient
+
+  handlers:
+    - include: handlers/handlers.yml
+
+- hosts: airplay_servers
+  remote_user: pi
+  become_user: root
+  become: yes
+  tags: airplay
+
+  roles:
+    - airplay
+
+  handlers:
+    - include: handlers/handlers.yml
+
+- hosts: kerberosio_machinery_servers
+  remote_user: pi
+  become_user: root
+  become: yes
+  tags: kerberosio
+
+  roles:
+    - kerberosio_machinery
+    - kerberosio_web
+
+  handlers:
+    - include: handlers/handlers.yml
+
+- hosts: kodi
+  remote_user: pi
+  become_user: root
+  become: yes
+  tags: kodi
+
+  roles:
+    - kodi
+
+  handlers:
+    - include: handlers/handlers.yml
+
+- hosts: firewalls
+  remote_user: mikey
+  connection: network_cli
+  tags: firewall
+  roles:
+    - firewall
