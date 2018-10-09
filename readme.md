@@ -5,7 +5,7 @@ Currently configures a [EdgeRouter-X](https://www.ubnt.com/edgemax/edgerouter-x/
 Typical usage:
 
 ```
-ansible-playbook -i inventory main.yml --tags firewall
+ansible-playbook -i inventory main.yml --tags firewall -l home.mclellan.org.nz
 ```
 
 ## Raspberry Pis

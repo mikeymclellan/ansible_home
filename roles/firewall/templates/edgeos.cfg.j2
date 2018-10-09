@@ -36,6 +36,15 @@ firewall {
             }
         }
         rule 20 {
+            action accept
+            description SSH
+            destination {
+                port 22
+            }
+            log disable
+            protocol tcp_udp
+        }
+        rule 30 {
             action drop
             description "Drop invalid state"
             state {
@@ -104,6 +113,48 @@ interfaces {
         }
     }
 }
+port-forward {
+    auto-firewall enable
+    hairpin-nat enable
+    lan-interface switch0
+    rule 1 {
+        description "Attic HTTP"
+        forward-to {
+            address 192.168.1.14
+            port 80
+        }
+        original-port 80
+        protocol tcp_udp
+    }
+    rule 2 {
+        description "Attic HTTPS"
+        forward-to {
+            address 192.168.1.14
+            port 443
+        }
+        original-port 443
+        protocol tcp_udp
+    }
+    rule 3 {
+        description "Attic Kerberos.io Video Stream"
+        forward-to {
+            address 192.168.1.14
+            port 8889
+        }
+        original-port 8889
+        protocol tcp_udp
+    }
+    rule 4 {
+        description "Kitchen Kerberos.io Video Stream"
+        forward-to {
+            address 192.168.1.14
+            port 8888
+        }
+        original-port 8888
+        protocol tcp_udp
+    }
+    wan-interface eth0.10
+}
 service {
     dhcp-server {
         disabled false
@@ -168,7 +219,7 @@ system {
     login {
         user {{admin_account.username}} {
             authentication {
-                encrypted-password $6$wRhAOvBLC$SL/LnzPR31ztgOiW1/YOcnC2aVbY4uTj.1SFrUd7M5kthfQfhivfBoZTKrFXBMqD7YN5TvnOqwMUvTvmQIzjn/
+                encrypted-password {{ admin_account.crypted_password }}
                 plaintext-password ""
                 public-keys {{admin_account.username}} {
                     key {{ admin_account.ssh_public_key_only }}

@@ -2,12 +2,12 @@
 
 admin_account:
     username: mikey
-    crypted_password: {{ vault_admin_account.crypted_password }}
-    ssh_public_key: {{ vault_admin_account.ssh_public_key }}
-    ssh_public_key_only: {{ vault_admin_account.ssh_public_key_only }}
+    crypted_password: "{{ vault_admin_account.crypted_password }}"
+    ssh_public_key: "{{ vault_admin_account.ssh_public_key }}"
+    ssh_public_key_only: "{{ vault_admin_account.ssh_public_key_only }}"
 
 apt_upgrade: false
 
 wificlient_networks:
   - ssid: McLellan
-    psk: {{ vault_wifi_mclellan_password }}
+    psk: "{{ vault_wifi_mclellan_password }}"
