@@ -21,11 +21,4 @@ ansible-playbook -i inventory main.yml --tags firewall -l home.mclellan.org.nz
     cp  /etc/wpa_supplicant/wpa_supplicant.conf  /tmp/new_sd_card/etc/wpa_supplicant
     ln -s /lib/systemd/system/ssh.service /tmp/new_sd_card/etc/systemd/system/multi-user.target.wants/ssh.service 
     umount /tmp/new_sd_card
-    
-### To bootstrap a new machine with no ssh keys yet, add the IP to `/etc/hosts` and run:
-
-    ansible-playbook -i inventory main.yml --ask-pass -l [hostname]
-    
-It'll fail after changing the `pi` users password so after that just re-run the command without `--ask-pass`
-
  
