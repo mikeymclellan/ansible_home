@@ -44,8 +44,23 @@
 - name: Use tmpfs for log folder
   lineinfile: dest=/etc/fstab line='tmpfs           /var/log          tmpfs   defaults,noatime,mode=0755 0       0'
 
-- name: Use tmpfs for lock folder
-  lineinfile: dest=/etc/fstab line='tmpfs           /var/lock         tmpfs   defaults,noatime,mode=0755 0       0'
+- name: Use tmpfs for /var/run folder
+  lineinfile: dest=/etc/fstab line='tmpfs           /var/run          tmpfs   defaults,noatime,mode=0755 0       0'
+
+#- name: Use tmpfs for lock folder
+#  lineinfile: dest=/etc/fstab line='tmpfs           /var/lock         tmpfs   defaults,noatime,mode=0755 0       0'
+
+#- name: Check if swap enabled
+#  shell: swapon -s | wc -l
+#  register: swap_enabled
+#
+#- name: Disable swap
+#  shell: "{{ item }}"
+#  with_items:
+#  - dphys-swapfile swapoff
+#  - dphys-swapfile uninstall
+#  - update-rc.d dphys-swapfile disable
+#  when: swap_enabled.stdout != "1"
 
 #- cron:
 #    name: Update Duck DNS

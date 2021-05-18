@@ -63,13 +63,6 @@
     name: bower
     global: yes
 
-- file:
-    src: /usr/bin/nodejs
-    dest: /usr/bin/node
-    owner: root
-    group: root
-    state: link
-
 - shell: bower --allow-root install
   args:
     chdir: /var/www/web/public

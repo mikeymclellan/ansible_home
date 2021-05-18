@@ -1,0 +1,46 @@
+---
+- apt: pkg=netatalk state=latest
+
+- name: Configure Netatalk
+  ini_file:
+      dest: /etc/netatalk/afp.conf
+      section: TimeMachine
+      option: path
+      value: /nas/timemachine
+
+- ini_file:
+    dest: /etc/netatalk/afp.conf
+    section: TimeMachine
+    option: time machine
+    value: yes
+
+- ini_file:
+    dest: /etc/netatalk/afp.conf
+    section: TimeMachine
+    option: valid users
+    value: mikey
+
+- ini_file:
+    dest: /etc/netatalk/afp.conf
+    section: TimeMachine
+    option: vol size limit
+    value: 980000
+
+- file:
+    state: directory
+    path: /nas
+
+- lineinfile:
+    dest: /etc/fstab
+    line: 'UUID=1262e745-4095-4db0-ac0d-0abce7852255	/nas	ext3	nosuid,nodev,nofail,x-gvfs-show	0	0'
+
+- shell: mount -a
+
+- name: Enable services
+  service:
+      name: "{{ item }}"
+      enabled: yes
+      state: started
+  with_items:
+    - netatalk.service
+    - avahi-daemon.service

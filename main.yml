@@ -1,5 +1,4 @@
 ---
-
 # Master playbook; include all the other group playbooks
 
 - hosts: raspberry_pis
@@ -7,10 +6,10 @@
   become_user: root
   become: yes
   tags: raspberry_pis
-
   roles:
     - common
-    - wificlient
+    - role: wificlient
+      when: enable_wifi == true
 
   handlers:
     - include: handlers/handlers.yml
@@ -58,3 +57,17 @@
   tags: firewall
   roles:
     - firewall
+
+- hosts: netatalk_servers
+  become_user: root
+  become: yes
+  tags: nas
+  roles:
+    - nas
+
+- hosts: snapservers
+  become_user: root
+  become: yes
+  tags: snapserver
+  roles:
+    - snapserver

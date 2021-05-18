@@ -1,22 +1,8 @@
 [raspberry_pis]
-kitchen
-brew-fridge
-telly
-attic
-stereo
+nas enable_wifi=false
 
-[airplay_servers]
-stereo
+[netatalk_servers]
+nas
 
-[seafile_servers]
-
-[kerberosio_machinery_servers]
-kitchen
-attic
-
-[kodi]
-telly
-
-[firewalls]
-home.mclellan.org.nz ansible_network_os=edgeos
-
+[snapservers]
+nas

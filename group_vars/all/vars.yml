@@ -8,6 +8,10 @@ admin_account:
 
 apt_upgrade: false
 
+enable_wifi: true
 wificlient_networks:
   - ssid: McLellan
     psk: "{{ vault_wifi_mclellan_password }}"
+
+  - ssid: ideahq
+    psk: "{{ vault_wifi_ideahq_password }}"

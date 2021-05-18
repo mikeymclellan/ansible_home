@@ -1,0 +1,38 @@
+---
+
+- name: Check if we have raspotify APT repo already enabled
+  shell: grep -r raspotify /etc/apt/sources.list.d
+  register: raspotify_repo
+  ignore_errors: true
+
+- block:
+      - name: Add raspotify APT repo
+        shell: curl -sSL https://dtcooper.github.io/raspotify/key.asc | sudo apt-key add -v -
+      - shell: echo 'deb https://dtcooper.github.io/raspotify raspotify main' | sudo tee /etc/apt/sources.list.d/raspotify.list
+
+      - name: Update APT cacahe
+        shell: apt-get update
+  when: raspotify_repo.stdout | length == 0
+
+- apt:
+     pkg: ['snapserver', 'raspotify']
+     state: latest
+
+- name: Configure snapserver stream
+  lineinfile:
+      dest: /etc/default/snapserver
+      regexp: '.*SNAPSERVER_OPTS.*'
+      line: SNAPSERVER_OPTS="-s spotify:///librespot?name=Spotify&devicename=Everywhere&bitrate=320&volume=50"
+      state: present
+
+- name: Enable snapserver
+  service:
+      name: snapserver
+      enabled: yes
+      state: started
+
+- name: Disable raspotify
+  service:
+      name: raspotify.service
+      enabled: no
+      state: stopped
