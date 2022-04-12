@@ -1,0 +1,5 @@
+---
+enable_wifi: false
+samba_users:
+  - username: mikey
+    password: "{{ vault_admin_account.password }}"

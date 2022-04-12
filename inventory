@@ -1,8 +1,11 @@
 [raspberry_pis]
 nas enable_wifi=false
 
-[netatalk_servers]
+[nas_servers]
 nas
 
 [snapservers]
 nas
+
+[firewalls]
+192.168.1.1

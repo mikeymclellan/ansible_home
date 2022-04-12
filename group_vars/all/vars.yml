@@ -1,5 +1,4 @@
 ---
-
 admin_account:
     username: mikey
     crypted_password: "{{ vault_admin_account.crypted_password }}"
@@ -12,6 +11,3 @@ enable_wifi: true
 wificlient_networks:
   - ssid: McLellan
     psk: "{{ vault_wifi_mclellan_password }}"
-
-  - ssid: ideahq
-    psk: "{{ vault_wifi_ideahq_password }}"

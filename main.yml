@@ -58,7 +58,7 @@
   roles:
     - firewall
 
-- hosts: netatalk_servers
+- hosts: nas_servers
   become_user: root
   become: yes
   tags: nas

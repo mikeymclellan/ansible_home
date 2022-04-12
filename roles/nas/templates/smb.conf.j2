@@ -1,0 +1,29 @@
+[Global]
+min protocol = SMB2
+vfs objects = fruit streams_xattr
+fruit:metadata = stream
+fruit:model = MacSamba
+fruit:posix_rename = yes
+fruit:veto_appledouble = no
+fruit:wipe_intentionally_left_blank_rfork = yes
+fruit:delete_empty_adfiles = yes
+
+load printers = no
+printing = bsd
+printcap name = /dev/null
+disable spoolss = yes
+
+[Timemachine]
+    comment = Time Machine
+    path = /nas/timemachine
+    valid users = mikey
+    browseable = yes
+    writeable = yes
+    create mask = 0600
+    directory mask = 0700
+    spotlight = yes
+    vfs objects = catia fruit streams_xattr
+    fruit:aapl = yes
+    fruit:time machine = yes
+
+
