@@ -1,0 +1,7 @@
+#!/bin/sh
+route add {{ openvpn_server_ip }} gw 192.168.1.1 eth0
+route add default gw 172.16.0.5 tun0
+route delete default gw 192.168.1.1 eth0
+iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE
+echo 1 > /proc/sys/net/ipv4/ip_forward
+sysctl -w net.ipv4.ip_forward=1

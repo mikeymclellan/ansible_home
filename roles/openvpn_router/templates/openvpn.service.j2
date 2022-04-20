@@ -1,0 +1,15 @@
+[Unit]
+Description = OpenVPN Client
+After=network.target
+
+[Service]
+User=root
+Group=root
+Type=notify
+PrivateTmp=trueA
+# Need to ensure we have a working default route as it may have been removed
+ExecStartPre=sh -c '/usr/sbin/route add default gw 192.168.1.1 eth0 || true'
+ExecStart=/usr/sbin/openvpn --cd /etc/openvpn/ --config client.ovpn --script-security 2 --up /etc/openvpn/post-up.sh
+
+[Install]
+WantedBy = multi-user.target

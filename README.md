@@ -1,11 +1,14 @@
 # Ansible Scripts for Home Network
 
-Currently, the only host this configures is a NAS server running Samba for network backups and Snapserver for multi-room
-music streaming. 
+Configures a NAS server running Samba for network backups, a Snapserver for multi-room music streaming, and an OpenVPN 
+client which we route traffic for streaming video from the UK. 
+
+As part of the `openvpn_router` role, it will also create the OpenVPN server as part of an AWS Cloudformation stack in 
+AWS' London region.
 
 It also has a role for taking a backup of the [EdgeRouter-X](https://www.ubnt.com/edgemax/edgerouter-x/) config.
 
-It has roles included for:
+Additionally, it has some deprecated roles included for:
 
  * KerberosIO video surveillance 
  * Airplay server
@@ -20,7 +23,7 @@ If setting up a Unifi controller:
 Typical usage:
 
     ansible-playbook -i inventory main.yml -l nas
-
+    ansible-playbook -i inventory main.yml -l nas -t openvpn_routers
 
 Taking a backup of the firewall config:
 
@@ -31,6 +34,21 @@ Taking a backup of the firewall config:
 The NAS server is running Avahi (Bonjour) so it should just appear in Apple Finder, but otherwise you can connect with 
 
     open smb://mikey@nas
+
+## Video Streaming VPN 
+
+To allow access to video streaming service in the UK we set up an OpenVPN client on the NAS server and an AWS stack 
+running the OpenVPN server in the AWS London region. The NAS server's default route sends everything thru the VPN and 
+it's setup to forward & NAT traffic.
+
+The Edgerouter (firewall) is set up with a dynamic firewall group called `RouteThruUkVpn` which is populated 
+automatically by dnsmasq whenever a DNS address is resolved matching the `ipset` parameter in config. 
+
+The Edgerouter also has a RouteThruUkVpn modify rule added to the firewall which will use route table 2 for anything in 
+the `RouteThruUkVpn` group. Route table 2 simply forwards all traffic to 192.168.1.68 (NAS).
+
+The other way this could be achieved is by running the OpenVPN client directly on the Edgerouter, however the 
+performance isn't very good.  
 
 ## Bootstrapping Raspberry Pis
 

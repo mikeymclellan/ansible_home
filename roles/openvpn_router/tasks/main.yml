@@ -1,0 +1,64 @@
+---
+- name: Creating OpenVPN cloudformation stack
+  become: false
+  connection: local
+  cloudformation:
+    profile: "{{ aws_profile }}"
+    region: "{{ aws_region }}"
+    stack_name: "{{ aws_openvpn_stack_name }}"
+    template: roles/openvpn_router/templates/cfn-openvpn.yaml
+    create_changeset: false
+    template_parameters:
+      SSHKeyName: "{{ aws_ssh_key_name }}"
+      InstanceType: "{{ aws_openvpn_instance_type }}"
+  register: cloudformation_output
+
+- debug:
+    msg: "{{ cloudformation_output.stack_outputs.VPNClientsS3Bucket }}"
+
+- debug:
+    msg: "{{ cloudformation_output.stack_outputs.OpenVPNEIP }}"
+
+- set_fact:
+    openvpn_client_config_s3_bucket: "{{ cloudformation_output.stack_outputs.VPNClientsS3Bucket }}"
+
+- set_fact:
+    openvpn_server_ip: "{{ cloudformation_output.stack_outputs.OpenVPNEIP }}"
+
+- name: Get the OpenVPN client config file
+  become: false
+  connection: local
+  aws_s3:
+    profile: "{{ aws_profile }}"
+    bucket: "{{ openvpn_client_config_s3_bucket }}"
+    object: /client/openvpn_clientuser.ovpn
+    dest: /tmp/openvpn_clientuser.ovpn
+    mode: get
+
+- apt:
+   pkg: ['iptables', 'openvpn']
+   state: latest
+
+- name: Add OpenVPN config
+  #template: src=openvpn_clientuser.ovpn.j2 dest=/etc/openvpn/client.ovpn
+  copy:
+    src: /tmp/openvpn_clientuser.ovpn
+    dest: /etc/openvpn/client.ovpn
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Add OpenVPN post-up script
+  template: src=post-up.sh.j2 dest=/etc/openvpn/post-up.sh
+
+- name: Make OpenVPN post-up script executable
+  file: dest=/etc/openvpn/post-up.sh mode=a+x
+
+- name: Add systemd service for OpenVPN
+  template: src=openvpn.service.j2 dest=/etc/systemd/system/openvpn-custom.service
+
+- name: Enable and start service
+  systemd:
+    name: openvpn-custom
+    state: restarted
+    enabled: yes

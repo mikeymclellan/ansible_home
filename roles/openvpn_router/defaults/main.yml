@@ -1,0 +1,7 @@
+---
+openvpn_server:
+aws_profile:
+aws_region:
+aws_openvpn_stack_name:
+aws_ssh_key_name:
+aws_openvpn_instance_type:

@@ -65,6 +65,13 @@
   roles:
     - nas
 
+- hosts: openvpn_routers
+  become_user: root
+  become: yes
+  tags: openvpn_routers
+  roles:
+    - openvpn_router
+
 - hosts: snapservers
   become_user: root
   become: yes

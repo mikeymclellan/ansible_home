@@ -1,0 +1,11 @@
+---
+aws_profile: mclellan
+
+# If you mofify the instance type you need to delete and recreate the stack for some reason. Just upsizing the machine
+# and rebooting will result in not being able to access the internet thru the VPN tunnel.
+aws_openvpn_instance_type: t4g.nano
+aws_region: eu-west-2 # London
+#aws_region: ap-southeast-1 # Singapore
+aws_openvpn_stack_name: openvpn-personal
+aws_ssh_key_name: mikey
+local_gateway_ip: 192.168.1.1

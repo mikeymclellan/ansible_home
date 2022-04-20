@@ -1,6 +1,9 @@
 [raspberry_pis]
 nas enable_wifi=false
 
+[openvpn_routers]
+nas
+
 [nas_servers]
 nas
 
