@@ -1,5 +1,25 @@
 ---
 - name: Save config backup
+  when: "'firewall_restore' not in ansible_run_tags"
   edgeos_config:
     # src: edgeos.cfg.j2
     backup: yes
+
+- block:
+    - name: Get files in a folder
+      find:
+        paths: "roles/firewall/backup"
+      register: found_files
+
+    - name: Get latest file
+      set_fact:
+        latest_file: "{{ found_files.files | sort(attribute='mtime',reverse=true) | first }}"
+
+    - debug:
+        msg: "Restoring Edgerouter backup from '{{ latest_file.path }}'"
+
+    - name: Restore config backup
+      edgeos_config:
+        src: "{{ latest_file.path }}"
+
+  when: "'firewall_restore' in ansible_run_tags"

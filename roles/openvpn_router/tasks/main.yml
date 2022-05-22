@@ -2,6 +2,7 @@
 - name: Creating OpenVPN cloudformation stack
   become: false
   connection: local
+  tags: fetch_ovpn_file
   cloudformation:
     profile: "{{ aws_profile }}"
     region: "{{ aws_region }}"
@@ -26,6 +27,7 @@
     openvpn_server_ip: "{{ cloudformation_output.stack_outputs.OpenVPNEIP }}"
 
 - name: Get the OpenVPN client config file
+  tags: fetch_ovpn_file
   become: false
   connection: local
   aws_s3:

@@ -25,9 +25,17 @@ Typical usage:
     ansible-playbook -i inventory main.yml -l nas
     ansible-playbook -i inventory main.yml -l nas -t openvpn_routers
 
+Download the OpenVpn Clinet config with:
+
+    ANSIBLE_GATHERING=0 ansible-playbook -i inventory main.yml -t fetch_ovpn_file
+
 Taking a backup of the firewall config:
 
     ansible-playbook -i inventory main.yml -l firewalls
+
+Restoring the latest backup:
+
+    ansible-playbook -i inventory main.yml -l firewalls -t firewall_restore
 
 ## NAS
 

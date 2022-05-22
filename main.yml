@@ -54,7 +54,9 @@
 - hosts: firewalls
   remote_user: mikey
   connection: network_cli
-  tags: firewall
+  tags:
+    - firewall
+    - firewall_restore
   roles:
     - firewall
 
@@ -68,7 +70,9 @@
 - hosts: openvpn_routers
   become_user: root
   become: yes
-  tags: openvpn_routers
+  tags:
+    - openvpn_routers
+    - fetch_ovpn_file
   roles:
     - openvpn_router
 

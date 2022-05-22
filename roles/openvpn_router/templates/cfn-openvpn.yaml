@@ -133,18 +133,6 @@ Resources:
       SubnetId: !Ref MyPublicSubnet
       RouteTableId: !Ref myRouteTablePublic
 
-  # Request a new Elastic IP Address
-  OpenVPNEIP:
-    Type: "AWS::EC2::EIP"
-    Properties:
-      Domain: vpc
-
-  # Bind our Elastic IP Address to an Elastic Network Interface
-  AssociateManagementAccessPort:
-    Type: AWS::EC2::EIPAssociation
-    Properties:
-      AllocationId: !GetAtt OpenVPNEIP.AllocationId
-      NetworkInterfaceId: !Ref myNetworkInterface
 
   # Create a security group for the ENI that will be attached to our OpenVPN server
   # OpenVPN and SSH port access
@@ -161,6 +149,10 @@ Resources:
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
+          CidrIp: !Ref ClientIPCIDR
+        - IpProtocol: !Ref OpenVPNProtocol
+          FromPort: 53
+          ToPort: 53
           CidrIp: !Ref ClientIPCIDR
 
   # This is the IAM role which will be associated with our EC2 instance
@@ -226,21 +218,6 @@ Resources:
       Roles:
        - !Ref myEC2InstanceRole
 
-  # The Elastic Network Interface which will be attached to our EC2 instance
-  # Our security group, OpenVPNInstanceSG is also associated with this interface
-  myNetworkInterface:
-    Type: AWS::EC2::NetworkInterface
-    Properties:
-      SubnetId: !Ref MyPublicSubnet
-      Description: Public Interface
-      GroupSet:
-      - !Ref OpenVPNInstanceSG
-      SourceDestCheck: false
-      Tags:
-        -
-          Key: Name
-          Value: Public ENI
-
   # The EC2 instance which will host OpenVPN
   EC2OpenVPNInstance:
     Type: "AWS::EC2::Instance"
@@ -251,8 +228,12 @@ Resources:
       SourceDestCheck: false
       KeyName: !Ref SSHKeyName
       NetworkInterfaces:
-        - NetworkInterfaceId: !Ref myNetworkInterface
+        - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
+          GroupSet:
+            - Ref: "OpenVPNInstanceSG"
+          SubnetId:
+            Ref: "MyPublicSubnet"
       IamInstanceProfile: !Ref ec2InstanceProfile
       Tags:
         -
@@ -289,6 +270,7 @@ Resources:
             - "generate_client"
             - "configure_server"
             - "upload_files"
+            - "install_dnsmasq"
 
         # Configure and start cfn-hup
         # cfn-hup will poll the stack for changes, and if possible, apply instance changes in place on the instance
@@ -389,7 +371,7 @@ Resources:
                 # Uncomment this if the server pushes a default route we want to ignore
                 #route-nopull
                 proto ${OpenVPNProtocol}
-                remote ${OpenVPNEIP} ${OpenVPNPort}
+                remote vpn.mclellan.org.nz ${OpenVPNPort}
                 tls-client
                 cipher AES-256-CBC
                 auth SHA512
@@ -500,6 +482,18 @@ Resources:
               command: !Sub |
                 aws s3 cp /var/log/cfn-init.log s3://${OpenVPNS3Bucket}/log/genSecrets_cfn-init.log
 
+        install_dnsmasq:
+          packages:
+            yum:
+              dnsmasq: [ ]
+          commands:
+            remove_config:
+              command: rm /etc/dnsmasq.conf
+            enable_dnsmasq:
+              command: systemctl enable dnsmasq
+            start_dnsmasq:
+              command: systemctl start dnsmasq
+
   # Original Source for the following Python 3.7 CustomResource section:
   # https://github.com/mike-mosher/custom-resource-s3-bucket-delete
   EmptyS3BucketLambdaExecutionRole:
@@ -577,6 +571,17 @@ Resources:
       ServiceToken: !GetAtt EmptyS3BucketLambdaFunction.Arn
       s3bucketName: !Ref OpenVPNS3Bucket
 
+  VpnDnsRecord:
+     Type: AWS::Route53::RecordSet
+     Properties:
+         HostedZoneName: mclellan.org.nz.
+         Comment: Open VPN Server
+         Name: vpn.mclellan.org.nz.
+         Type: CNAME
+         TTL: '300'
+         ResourceRecords:
+             - !GetAtt EC2OpenVPNInstance.PublicIp
+
 Outputs:
   VPNClientsS3Bucket:
     Description: S3 bucket name
@@ -586,7 +591,7 @@ Outputs:
     Value: !Sub s3://${OpenVPNS3Bucket}/client/openvpn_clientuser.ovpn
   OpenVPNEIP:
     Description: Instance EIP
-    Value: !Ref OpenVPNEIP
+    Value: !GetAtt EC2OpenVPNInstance.PublicIp
   EC2OpenVPNInstance:
     Description: EC2 Instance
     Value: !Ref EC2OpenVPNInstance
