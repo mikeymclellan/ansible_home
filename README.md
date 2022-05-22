@@ -46,7 +46,7 @@ The NAS server is running Avahi (Bonjour) so it should just appear in Apple Find
 ## Video Streaming VPN 
 
 To allow access to video streaming service in the UK we set up an OpenVPN client on the NAS server and an AWS stack 
-running the OpenVPN server in the AWS London region. The NAS server's default route sends everything thru the VPN and 
+running the OpenVPN server in the AWS London region. The NAS server's default route sends everything thru the VPN, and 
 it's setup to forward & NAT traffic.
 
 The Edgerouter (firewall) is set up with a dynamic firewall group called `RouteThruUkVpn` which is populated 
@@ -57,6 +57,15 @@ the `RouteThruUkVpn` group. Route table 2 simply forwards all traffic to 192.168
 
 The other way this could be achieved is by running the OpenVPN client directly on the Edgerouter, however the 
 performance isn't very good.  
+
+### DNS
+
+DNSMasq running on the firewall will forward some DNS requests thru to the vpm.mclellan.org.nz server so that DNS 
+responses resolve to UK based addresses. Otherwise streaming TV will be via a local Akamai edge server. 
+
+The OpenVPN server IP is configured with dnsmasq like this:
+    
+    server=/eurosport-vod.akamai.prod-live.h264.io/3.8.135.191
 
 ## Bootstrapping Raspberry Pis
 
