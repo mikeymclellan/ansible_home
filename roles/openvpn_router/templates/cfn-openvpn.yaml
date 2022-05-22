@@ -577,7 +577,7 @@ Resources:
          HostedZoneName: mclellan.org.nz.
          Comment: Open VPN Server
          Name: vpn.mclellan.org.nz.
-         Type: CNAME
+         Type: A
          TTL: '300'
          ResourceRecords:
              - !GetAtt EC2OpenVPNInstance.PublicIp
