@@ -60,10 +60,10 @@ performance isn't very good.
 
 ### DNS
 
-DNSMasq running on the firewall will forward some DNS requests thru to the vpm.mclellan.org.nz server so that DNS 
+DNSMasq running on the firewall will forward some DNS requests thru to the vpn.mclellan.org.nz server so that DNS 
 responses resolve to UK based addresses. Otherwise streaming TV will be via a local Akamai edge server. 
 
-The OpenVPN server IP is configured with dnsmasq like this:
+The OpenVPN server IP is configured with dnsmasq on the firewall like this:
     
     server=/eurosport-vod.akamai.prod-live.h264.io/3.8.135.191
 
