@@ -21,5 +21,6 @@
     - name: Restore config backup
       edgeos_config:
         src: "{{ latest_file.path }}"
+        save: true
 
   when: "'firewall_restore' in ansible_run_tags"

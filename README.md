@@ -37,6 +37,10 @@ Restoring the latest backup:
 
     ansible-playbook -i inventory main.yml -l firewalls -t firewall_restore
 
+Or from a fresh router reset, set a static IP of 192.168.1.2 and run:
+
+    ansible-playbook -i inventory main.yml -l firewalls -t firewall_restore -e 'ansible_ssh_user=ubnt ansible_ssh_pass=ubnt'
+
 ## NAS
 
 The NAS server is running Avahi (Bonjour) so it should just appear in Apple Finder, but otherwise you can connect with 
