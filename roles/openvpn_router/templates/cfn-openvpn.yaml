@@ -448,6 +448,7 @@ Resources:
                 max-clients 5
                 user nobody
                 group nobody
+                duplicate-cn
               mode: "000644"
               owner: "root"
               group: "root" 
