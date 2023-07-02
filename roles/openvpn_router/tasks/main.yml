@@ -1,7 +1,5 @@
 ---
 - name: Creating OpenVPN cloudformation stack
-  vars:
-    ansible_python_interpreter: /usr/local/bin/python3
   become: false
   connection: local
   tags: fetch_ovpn_file
@@ -29,8 +27,6 @@
     openvpn_server_ip: "{{ cloudformation_output.stack_outputs.OpenVPNEIP }}"
 
 - name: Get the OpenVPN client config file
-  vars:
-    ansible_python_interpreter: /usr/local/bin/python3
   tags: fetch_ovpn_file
   become: false
   connection: local

@@ -27,7 +27,7 @@ Typical usage:
 
 Download the OpenVpn Clinet config with:
 
-    ANSIBLE_GATHERING=0 ansible-playbook -i inventory main.yml -t fetch_ovpn_file
+    ANSIBLE_GATHERING=explicit ansible-playbook -i inventory main.yml -t fetch_ovpn_file
 
 Taking a backup of the firewall config:
 
